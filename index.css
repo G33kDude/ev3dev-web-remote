@@ -1,0 +1,23 @@
+html, body {
+	width: 100%; height: 100%;
+	margin: 0; padding: 0;
+	background-color: #333;
+}
+
+#brick {
+	width: 350px; height: 550px;
+	
+	position: absolute;
+	top: 50%; left: 50%;
+	transform: translate(-50%, -50%);
+	
+	background-image: url('ev3.svg');
+	background-size: 350px auto;
+	background-repeat: no-repeat;
+}
+
+#brick img {
+	position: relative;
+	top: 60px;
+	left: 86px; /* (350-178)/2 */
+}
