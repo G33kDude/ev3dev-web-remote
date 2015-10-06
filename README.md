@@ -2,7 +2,7 @@
 
 ## prerequisites
 
-On the ev3 run `easy-install python-evdev`.
+On the ev3 run `apt-get install python-evdev`.
 
 ## running
 
