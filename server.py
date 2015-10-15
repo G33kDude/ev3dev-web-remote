@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import BaseHTTPServer
 import SimpleHTTPServer
 import SocketServer
@@ -52,7 +53,7 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 				self.end_headers()
 				self.wfile.write(jpg)
 				self.wfile.write('--boundarydonotcross')
-				print 'written', i
+				print('written {}'.format(i))
 				i+=1
 		else:
 			f = self.send_head()
@@ -70,6 +71,6 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 			send_key(int(jskc), int(state))
 
 if __name__ == '__main__':
-	print "Running on port {}".format(SERVER_PORT)
+	print("Running on port {}".format(SERVER_PORT))
 	httpd = ThreadedHTTPServer(('', SERVER_PORT), MyHandler)
 	httpd.serve_forever()
