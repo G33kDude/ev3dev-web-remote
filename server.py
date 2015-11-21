@@ -26,13 +26,14 @@ class ThreadedHTTPServer(SocketServer.ThreadingMixIn, BaseHTTPServer.HTTPServer)
 	daemon_threads = True
 
 # https://github.com/ev3dev/ev3dev/wiki/Using-the-LCD
-fbmap = {chr(i): ''.join(chr(int(x)) for x in '{:08b}'.format(i)[::-1]) for i in range(256)}
+fb_palette = (124,145,111)+(0,0,0)*255
 def jpg_from_fb():
-	with open('/dev/fb0', 'r') as f:
-		x = ''.join(fbmap[char] for char in f.read())
 	sio = StringIO()
-	im = PIL.Image.fromstring('P', (192,128), x)
-	im.putpalette((124,145,111, 0,0,0))
+	with open('/dev/fb0', 'r') as f:
+		x = f.read()
+	im = PIL.Image.fromstring('1', (192,128), x, 'raw', '1;R')
+	im = im.convert('P')
+	im.putpalette(fb_palette)
 	im.convert('RGB').crop((0,0,178,128)).save(sio, 'JPEG')
 	jpg = sio.getvalue()
 	sio.close()
