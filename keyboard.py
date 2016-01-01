@@ -1,4 +1,6 @@
-from evdev import ecodes as e
+import evdev
+
+e = evdev.ecodes
 js_map = {
 	0x08: e.KEY_BACKSPACE,  # BACKSPACE
 	0x09: e.KEY_TAB,        # TAB
@@ -97,3 +99,12 @@ js_map = {
 	0xDC: e.KEY_BACKSLASH,  # BACKSLASH
 	0xDD: e.KEY_RIGHTBRACE, # CLOSE_SQUARE_BRACKET
 }
+
+class Keyboard:
+	def __init__(self):
+		self.uinput = evdev.UInput()
+	def close(self):
+		self.uinput.close()
+	def send_key(self, js_keycode, state):
+		self.uinput.write(evdev.ecodes.EV_KEY, js_map[js_keycode], 1 if state else 0)
+		self.uinput.syn()

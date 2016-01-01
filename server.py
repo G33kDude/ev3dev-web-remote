@@ -7,19 +7,10 @@ import PIL.Image
 import threading
 import evdev
 
-from uinput_map import js_map
+from keyboard import Keyboard
 
+KEYBOARD = Keyboard()
 SERVER_PORT = 8080
-
-send_key_lock = threading.Lock()
-def send_key(js_keycode, state):
-	if js_keycode not in js_map:
-		raise KeyError("Unkown javascript keycode: {}".format(js_keycode))
-	send_key_lock.acquire()
-	with evdev.UInput() as uinput:
-		uinput.write(evdev.ecodes.EV_KEY, js_map[js_keycode], 1 if state else 0)
-		uinput.syn()
-	send_key_lock.release()
 
 class ThreadedHTTPServer(SocketServer.ThreadingMixIn, BaseHTTPServer.HTTPServer):
 	"""Handle requests in a separate thread."""
@@ -69,7 +60,7 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 			content_len = int(self.headers.getheader('content-length', 0))
 			content = self.rfile.read(content_len)
 			jskc, state = content.split(',')
-			send_key(int(jskc), int(state))
+			KEYBOARD.send_key(int(jskc), int(state))
 
 if __name__ == '__main__':
 	print("Running on port {}".format(SERVER_PORT))
